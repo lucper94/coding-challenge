@@ -1,0 +1,28 @@
+.selected{
+	display: flex;
+	align-content: flex-start;
+	margin-left: 45px;
+	text-align: left;
+}
+
+.results{
+	display: flex;
+	align-content: flex-start;
+	margin-left: 45px;
+	text-align: left;
+}
+
+.results .col{
+	margin-bottom: 14px;
+}
+
+.selected .col{
+	margin-bottom: 14px;
+}
+
+.result-container{
+	margin-top: 20px;
+	margin-top: 20px;
+}
+
+
