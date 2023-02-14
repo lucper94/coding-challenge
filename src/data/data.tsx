@@ -1,7 +1,5 @@
-function data() {
-  return {
-  "data": {
-    "getAvailableFiltersForLanguageSearch": {
+const data  =
+  {
       "campuses": [
         {
           "id": "2",
@@ -18277,8 +18275,5 @@ function data() {
         }
       ]
     }
-  }
-}
-     
-}
+
 export default data;

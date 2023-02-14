@@ -3,21 +3,12 @@ import SearchFields from './SearchFields';
 import Results from './Results';
 import Button from '@mui/material/Button';
 import { useState, useEffect } from 'react';
-import Global from '../contexts/Global';
 import data from '../data/data';
 
-
 function SearchForm() {
-  const [isdata, setIsdata] = useState({});
-
-  useEffect(() => {
-    setIsdata(data())
-    console.log(isdata)
-  }, [])
 
   return ( 
     <>
-      {(isdata&&<Global.Provider value={isdata} >
         <div className="container text-center">
           <div className="column">
             <div className="col">
@@ -33,7 +24,6 @@ function SearchForm() {
             </div>
           </div>
         </div>
-      </Global.Provider >)}
     </>
     ) 
      

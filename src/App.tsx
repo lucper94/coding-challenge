@@ -7,10 +7,11 @@ import { useState, useEffect } from 'react';
 
 function App() {
   return (
-    <div>
-     <Header></Header>
-     <SearchForm></SearchForm>
-    </div>
+      <div>
+       <Header></Header>
+          <SearchForm></SearchForm>
+      </div>
+     
   );
 }
 
