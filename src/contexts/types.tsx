@@ -14,15 +14,24 @@ export interface campuses {
 	"location":location
 }
 
-export interface  locat{
+export interface  locations{
 	"id": string,
 	"name": string,
-	"country": string
+	"country": string,
+	"checked"?:boolean
 }
 
-export type Prueba = {
+export type ContextStates = {
 	campuses:campuses[]
-	locations:locat[]
+	locations:locations[]
 	country:country
-	setCountry:(country:country) => void
+	setCountry:(country:country) => void,
+	selectedLocations:string[], 
+	setSelectedLocations:(a:string[]) => void,
+	setProvider:(a:string) => void,
+	provider:string,
+	step:string, 
+	setStep:(a:string) => void,
+	selectedCampuses:string[], 
+	setSelectedCampuses:(a:string[]) => void,
 }
