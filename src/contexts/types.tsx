@@ -11,7 +11,9 @@ interface location {
 export interface campuses {
 	"id": string,
 	"name": string,
-	"location":location
+	"location":location,
+	"cityCountry"?: string,
+	"checked"?:boolean
 }
 
 export interface  locations{
@@ -31,7 +33,5 @@ export type ContextStates = {
 	setProvider:(a:string) => void,
 	provider:string,
 	step:string, 
-	setStep:(a:string) => void,
-	selectedCampuses:string[], 
-	setSelectedCampuses:(a:string[]) => void,
+	setStep:(a:string) => void
 }

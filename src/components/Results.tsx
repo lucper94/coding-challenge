@@ -2,8 +2,8 @@ import React, {useContext, useEffect, useState} from 'react';
 import '../styles/global.css';
 import {ContextStates, locations as locationType, campuses as campusesType} from '../contexts/types'
 import {Context} from '../contexts/Global';
-import { BsCheckLg } from "react-icons/bs";
-import {BsXLg} from "react-icons/bs";
+import { BsCheckLg, BsFillFlagFill, BsXLg } from "react-icons/bs";
+import Card from '@mui/material/Card';
 
 function Results() {
 
@@ -14,10 +14,7 @@ function Results() {
         setSelectedLocations,
         provider,
         campuses,
-        setProvider,
-        step,
-        selectedCampuses,
-        setSelectedCampuses
+        step
     } = useContext(Context)as ContextStates;
     const [currentLocations,
         setCurrentLocations] = useState < locationType[] | [] > ([]);
@@ -33,44 +30,76 @@ function Results() {
         setCampusesNumber] = useState < number > (0);
 
     useEffect(() => {
-        if (currentLocations.length === 0 && country.name.length > 2) {
-            const locationsFilter : locationType[] = locations.filter((item) => {
-                return item.country === country.code
-            })
-            setCurrentLocations(locationsFilter)
-        } else if (country.name.length < 3 && currentLocations.length > 0) {
-            setCurrentLocations([])
+      console.log()
+        for (let a = 0; a < locations.length; a++) {
+          campuses.map((campus) =>{
+            if(campus.location.id ===  locations[a].id){
+              campus.cityCountry = locations[a].name
+            }
+            return campus
+          })
         }
 
-        if (provider.length > 2) {
-            const campusData : campusesType[] = campuses.filter((item) => {
-                return item?.name.toLowerCase().includes(provider.toLowerCase())
-            })
-            console.log(campusData)
-            setCurrentCampuses(campusData)
-        } else {
-            setProvider('')
+        const checkedLocations:locationType[] = currentLocations.filter((item) => {
+          console.log(item?.checked)
+          return item?.checked === true
+        })
+        if (checkedLocations.length > 0) {
+            console.log(checkedLocations)
+            var campusesArray:campusesType[] = []
+            for (let i = 0; i < checkedLocations.length; i++) {
+                const filterCampuses:campusesType[] = campuses.filter((item) => {
+                  return item?.location?.id === checkedLocations[i].id
+                }).filter((campus) => {
+                  console.log(provider)
+                  console.log(campus)
+                  return campus.name.toLowerCase().includes(provider.toLowerCase())
+                })
+                console.log(filterCampuses)
+                campusesArray = [...campusesArray, ...filterCampuses]
+              
+            }
+            console.log(campusesArray)
+            setCurrentCampuses(campusesArray);
+        }else {
+          setCurrentCampuses(campuses)
         }
 
-    }, [currentLocations, country, provider])
+    }, [currentLocations, country, provider, selectedLocations])
 
     useEffect(() => {
-        if (!isDeleteLocation) {
-            console.log(selectedLocations)
-            selectedLocations.map((id, index) => {
-                locations.map((location) => {
-                    if (location.id === id) 
-                        setSelectedLocationsName([
-                            ...selectedLocationsName,
-                            location.name
-                        ])
-                })
-            })
-            setLocationNumber(selectedLocations.length)
+        if (isDeleteLocation) {
+            
+        }else{
+          console.log(selectedLocations)
+          selectedLocations.map((id, index) => {
+              locations.map((location) => {
+                  if (location.id === id) 
+                      setSelectedLocationsName([
+                          ...selectedLocationsName,
+                          location.name
+                      ])
+              })
+          })
+          setLocationNumber(selectedLocations.length)
         }
 
     }, [selectedLocations])
 
+    useEffect(() => {
+      console.log(step)
+      if(step == 'blurDestination') {
+        console.log(locations)
+        setCurrentLocations(locations)
+      }
+      const checkedLocations:locationType[] = currentLocations.filter((item) => {
+        console.log(item?.checked)
+        return item?.checked === true
+      })
+      if(step == 'blurProvider' && checkedLocations.length == 0) {
+        setCurrentCampuses(campuses)
+      }
+  }, [step])
 
     const onClickLocation = (event : any) => {
         setIsDeleteLocation(false)
@@ -79,8 +108,10 @@ function Results() {
             .getAttribute("data-value")
         console.log(event)
        
-        currentLocations[index].checked = true;
-        setCurrentLocations(currentLocations)
+        if(!currentLocations[index].checked){
+          currentLocations[index].checked = true;
+          setCurrentLocations(currentLocations)
+        }
         if (selectedLocations.length < 2) {
             setSelectedLocations([
                 ...selectedLocations,
@@ -93,18 +124,30 @@ function Results() {
         const index = event
             .currentTarget
             .getAttribute("data-value")
-        console.log(event)
-        const newArray : boolean[] = checkedCampuses
-        newArray[index] = true;
-        setCheckedCampuses(newArray)
-        if (selectedCampuses.length < 2) {
-            setSelectedCampuses([
-                ...selectedCampuses,
-                currentCampuses[index].name
-            ])
-            console.log(selectedCampuses)
+        const checkedCampuses:campusesType[] = currentCampuses.filter((item) => {
+          return item?.checked === true
+        })
+        if(!currentCampuses[index].checked && checkedCampuses.length<2){
+          currentCampuses[index].checked = true;
+          setCurrentCampuses(currentCampuses)
+          setCampusesNumber((campusesNumber) => campusesNumber + 1)
         }
-        setCampusesNumber((campusesNumber) => campusesNumber + 1)
+       
+    }
+
+    const deleteParents = (parentId:string) => {
+      const parentsArray : campusesType[] = currentCampuses.map((campus)=> {
+        if( campus.location.id == parentId){
+          campus.checked = false
+        }
+        return campus
+      })
+      setCurrentCampuses(parentsArray)
+      const checkedCampuses:campusesType[] = currentCampuses.filter((item) => {
+        console.log(item?.checked)
+        return item?.checked === true
+      })
+      setCampusesNumber(checkedCampuses.length)
     }
 
     const deleteLocation = (event : any) => {
@@ -113,14 +156,15 @@ function Results() {
             .currentTarget
             .getAttribute("data-value")
             console.log(index)
-        let locationCopy:locationType[] = locations.map((item, i) => {
+            deleteParents(selectedLocations[index])
+          let locationCopy:locationType[] = locations.map((item, i) => {
           if(item.id === selectedLocations[index]){
             item.checked=false
           }
           return item
         })
         setCurrentLocations(locationCopy)
-
+      
         const locationArray : string[] = selectedLocations;
         const locationNameArray : string[] = selectedLocationsName;
         let locationFilter : string[] = locationArray.filter((item, i) => i != index)
@@ -131,22 +175,26 @@ function Results() {
     }
 
     const deleteCampus = (event : any) => {
-        const index = event
+        const id = event
             .currentTarget
             .getAttribute("data-value")
-        const checkedCampusesArray : boolean[] = checkedCampuses
-        checkedCampusesArray[index] = false;
-        setCheckedCampuses(checkedCampusesArray)
-        const campusArray : string[] = selectedCampuses;
-        let newArray : string[] = campusArray.filter((item, i) => i !== index)
-        setSelectedCampuses(newArray)
+            console.log(id)
+            console.log(currentCampuses)
+        const campusesCopy : campusesType[] = currentCampuses.map((campus)=> {
+          if( campus.id == id){
+            campus.checked = false
+          }
+          return campus
+        })
         setCampusesNumber((campusesNumber) => campusesNumber - 1)
-        console.log(newArray)
+        setCurrentCampuses(campusesCopy)
+      
     }
 
     return (
+      <Card variant="outlined" className='mt-2'>
         <div className="container text-center result-container">
-            {step === 'destination' && (
+            {(step === 'destination' || step === 'blurDestination') && (
                 <div className="row">
                     <div className="col results">
                         <div className="column">
@@ -155,7 +203,7 @@ function Results() {
                             </div>
                             <div className="col">
                                 {country.name && (
-                                    <span>{country.name}</span>
+                                    <span><BsFillFlagFill/>{country.name} </span>
                                 )}
                             </div>
                             <div className="col">
@@ -208,7 +256,7 @@ function Results() {
                 </div>
             </div>
             )}
-            {step == 'provider' && (
+            {(step == 'provider' || step === 'blurProvider') && (
                 <div className="row">
                     <div className="col results">
                         <div className="column">
@@ -216,7 +264,7 @@ function Results() {
                                 <b>Campuses</b>
                             </div>
                             <div className="col">
-                                {currentCampuses.map((location, index) => (
+                                {currentCampuses.map((campus, index) => (
                                     <div
                                         data-value={index}
                                         key={index}
@@ -225,13 +273,20 @@ function Results() {
                                         <div className="col">
                                             <div className="row">
                                                 <div className="col">
-                                                    {location.name}
+                                                    {campus.name}
                                                 </div>
-                                                {checkedCampuses[index] == true && (
+                                               
+                                                {campus
+                                                    ?.checked == true && (
                                                     <div className="col">
                                                         <BsCheckLg/>
                                                     </div>
                                                 )}
+                                            </div>
+                                            <div className="row">
+                                              <div className="col">
+                                                   <small> {campus.cityCountry}</small>
+                                              </div>
                                             </div>
                                         </div>
                                     </div>
@@ -245,20 +300,25 @@ function Results() {
                                 </b>
                             </div>
                             <div className="col">
-                                {selectedCampuses.map((campus, index) => (
-                                    <div data-value={index} key={index} className="column" onClick={deleteCampus}>
+                                {currentCampuses.map((campus, index) => {
+                                   if(campus?.checked == true ){
+                                    return (
+                                      <div data-value={campus.id} key={index} className="column" onClick={deleteCampus}>
                                         <div className="col">
                                             <div className="row">
                                                 <div className="col">
-                                                    {campus}
+                                                    {campus.name}
                                                 </div>
                                                 <div className="col">
                                                   <BsXLg/>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
+                                     </div>
+                                      )
+                                    }
+                                   
+                                  })}
                             </div>
                         </div>
                     </div>
@@ -267,6 +327,7 @@ function Results() {
             </div>
             )}
         </div>
+      </Card>
     )
 
 }
