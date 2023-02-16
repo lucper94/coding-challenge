@@ -3,11 +3,11 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import '../styles/global.css';
 import {Context} from '../contexts/Global';
-import {ContextStates, locations as locationType, country} from '../contexts/types'
+import {ContextStates, country} from '../contexts/types'
 
 function SearchFields() {
     const countries = require('country-data').countries;
-    const {locations, campuses, setCountry, setProvider, setStep} = useContext(Context)as ContextStates;
+    const {locations, setCountry, setProvider, setStep} = useContext(Context)as ContextStates;
     var resArr : any[] = [];
     useEffect(() => {
 
@@ -44,7 +44,6 @@ function SearchFields() {
 
             if (countryData.length > 0) {
                 setCountry(countryData[0])
-                console.log(countryData[0])
             }
 
         } else {

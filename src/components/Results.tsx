@@ -30,7 +30,6 @@ function Results() {
         setCampusesNumber] = useState < number > (0);
 
     useEffect(() => {
-      console.log()
         for (let a = 0; a < locations.length; a++) {
           campuses.map((campus) =>{
             if(campus.location.id ===  locations[a].id){
@@ -41,25 +40,19 @@ function Results() {
         }
 
         const checkedLocations:locationType[] = currentLocations.filter((item) => {
-          console.log(item?.checked)
           return item?.checked === true
         })
         if (checkedLocations.length > 0) {
-            console.log(checkedLocations)
             var campusesArray:campusesType[] = []
             for (let i = 0; i < checkedLocations.length; i++) {
                 const filterCampuses:campusesType[] = campuses.filter((item) => {
                   return item?.location?.id === checkedLocations[i].id
                 }).filter((campus) => {
-                  console.log(provider)
-                  console.log(campus)
                   return campus.name.toLowerCase().includes(provider.toLowerCase())
                 })
-                console.log(filterCampuses)
                 campusesArray = [...campusesArray, ...filterCampuses]
               
             }
-            console.log(campusesArray)
             setCurrentCampuses(campusesArray);
         }else {
           setCurrentCampuses(campuses)
@@ -71,7 +64,6 @@ function Results() {
         if (isDeleteLocation) {
             
         }else{
-          console.log(selectedLocations)
           selectedLocations.map((id, index) => {
               locations.map((location) => {
                   if (location.id === id) 
@@ -87,13 +79,10 @@ function Results() {
     }, [selectedLocations])
 
     useEffect(() => {
-      console.log(step)
       if(step == 'blurDestination') {
-        console.log(locations)
         setCurrentLocations(locations)
       }
       const checkedLocations:locationType[] = currentLocations.filter((item) => {
-        console.log(item?.checked)
         return item?.checked === true
       })
       if(step == 'blurProvider' && checkedLocations.length == 0) {
@@ -106,7 +95,6 @@ function Results() {
         const index = event
             .currentTarget
             .getAttribute("data-value")
-        console.log(event)
        
         if(!currentLocations[index].checked){
           currentLocations[index].checked = true;
@@ -144,7 +132,6 @@ function Results() {
       })
       setCurrentCampuses(parentsArray)
       const checkedCampuses:campusesType[] = currentCampuses.filter((item) => {
-        console.log(item?.checked)
         return item?.checked === true
       })
       setCampusesNumber(checkedCampuses.length)
@@ -155,7 +142,6 @@ function Results() {
         const index:number = event
             .currentTarget
             .getAttribute("data-value")
-            console.log(index)
             deleteParents(selectedLocations[index])
           let locationCopy:locationType[] = locations.map((item, i) => {
           if(item.id === selectedLocations[index]){
@@ -178,8 +164,6 @@ function Results() {
         const id = event
             .currentTarget
             .getAttribute("data-value")
-            console.log(id)
-            console.log(currentCampuses)
         const campusesCopy : campusesType[] = currentCampuses.map((campus)=> {
           if( campus.id == id){
             campus.checked = false

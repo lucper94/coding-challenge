@@ -2,8 +2,6 @@ import React from 'react';
 import SearchFields from './SearchFields';
 import Results from './Results';
 import Button from '@mui/material/Button';
-import { useState, useEffect } from 'react';
-import data from '../data/data';
 
 function SearchForm() {
 
