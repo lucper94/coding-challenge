@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/coding-challenge/static/css/main.f5325bb4.css",
-    "main.js": "/coding-challenge/static/js/main.9958e9b5.js",
+    "main.css": "/coding-challenge/static/css/main.b43a7115.css",
+    "main.js": "/coding-challenge/static/js/main.c0d2de21.js",
     "static/js/787.d8cb7c0d.chunk.js": "/coding-challenge/static/js/787.d8cb7c0d.chunk.js",
     "index.html": "/coding-challenge/index.html",
-    "main.f5325bb4.css.map": "/coding-challenge/static/css/main.f5325bb4.css.map",
-    "main.9958e9b5.js.map": "/coding-challenge/static/js/main.9958e9b5.js.map",
+    "main.b43a7115.css.map": "/coding-challenge/static/css/main.b43a7115.css.map",
+    "main.c0d2de21.js.map": "/coding-challenge/static/js/main.c0d2de21.js.map",
     "787.d8cb7c0d.chunk.js.map": "/coding-challenge/static/js/787.d8cb7c0d.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.f5325bb4.css",
-    "static/js/main.9958e9b5.js"
+    "static/css/main.b43a7115.css",
+    "static/js/main.c0d2de21.js"
   ]
 }
