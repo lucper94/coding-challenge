@@ -12,8 +12,27 @@
 	text-align: left;
 }
 
+/* Ponemos un color de fondo y redondeamos las esquinas del thumb */
+.results::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+
+/* Cambiamos el fondo y agregamos una sombra cuando esté en hover */
+.results::-webkit-scrollbar-thumb:hover {
+    background: #b3b3b3;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Cambiamos el fondo cuando esté en active */
+.results::-webkit-scrollbar-thumb:active {
+    background-color: #999999;
+}
+
+
 .results .col{
 	margin-bottom: 14px;
+	padding-right: 10px;
 }
 
 .selected .col{
@@ -25,4 +44,21 @@
 	margin-top: 20px;
 }
 
+.campuses-container{
+	overflow-y: scroll;
+	height:400px;
+	border: 1px gray solid;
+	padding: 10px;
+}
+
+.locations-container{
+	overflow-y: scroll;
+	height:400px;
+	border: 1px gray solid;
+	padding: 10px;
+}
+
+.campus:hover{
+	background: #46aaed;
+}
 

@@ -10,6 +10,7 @@ function Results() {
     const {
         country,
         locations,
+        setLocations,
         selectedLocations,
         setSelectedLocations,
         provider,
@@ -42,6 +43,7 @@ function Results() {
         const checkedLocations:locationType[] = currentLocations.filter((item) => {
           return item?.checked === true
         })
+
         if (checkedLocations.length > 0) {
             var campusesArray:campusesType[] = []
             for (let i = 0; i < checkedLocations.length; i++) {
@@ -58,12 +60,10 @@ function Results() {
           setCurrentCampuses(campuses)
         }
 
-    }, [currentLocations, country, provider, selectedLocations])
+    }, [currentLocations, provider, selectedLocations])
 
     useEffect(() => {
-        if (isDeleteLocation) {
-            
-        }else{
+        if (!isDeleteLocation) {
           selectedLocations.map((id, index) => {
               locations.map((location) => {
                   if (location.id === id) 
@@ -79,7 +79,20 @@ function Results() {
     }, [selectedLocations])
 
     useEffect(() => {
-      if(step == 'blurDestination') {
+      if (country.name.length > 0) {
+        console.log(currentLocations)
+        var filterLocations:locationType[] = JSON.parse(JSON.stringify(locations));
+        filterLocations = filterLocations.filter((item) => {
+          console.log(item)
+          return item.name.toLowerCase().includes(country.name.toLowerCase())
+        })
+        console.log(filterLocations)
+        setCurrentLocations(filterLocations)
+      }
+    }, [country])
+
+    useEffect(() => {
+      if((step == 'blurDestination' && country.name.length > 0 ) || country.name.length == 0) {
         setCurrentLocations(locations)
       }
       const checkedLocations:locationType[] = currentLocations.filter((item) => {
@@ -96,10 +109,15 @@ function Results() {
             .currentTarget
             .getAttribute("data-value")
        
-        if(!currentLocations[index].checked){
+        if(!locations[index].checked){
+          locations.map(location => {
+            if(location.id == currentLocations[index].id)location.checked = true
+          })
           currentLocations[index].checked = true;
+          setLocations(locations)
           setCurrentLocations(currentLocations)
         }
+       
         if (selectedLocations.length < 2) {
             setSelectedLocations([
                 ...selectedLocations,
@@ -143,12 +161,13 @@ function Results() {
             .currentTarget
             .getAttribute("data-value")
             deleteParents(selectedLocations[index])
-          let locationCopy:locationType[] = locations.map((item, i) => {
+        let locationCopy:locationType[] = locations.map((item, i) => {
           if(item.id === selectedLocations[index]){
             item.checked=false
           }
           return item
         })
+        setLocations(locationCopy)
         setCurrentLocations(locationCopy)
       
         const locationArray : string[] = selectedLocations;
@@ -180,7 +199,7 @@ function Results() {
         <div className="container text-center result-container">
             {(step === 'destination' || step === 'blurDestination') && (
                 <div className="row">
-                    <div className="col results">
+                    <div className="col results" >
                         <div className="column">
                             <div className="col">
                                 <b>Results</b>
@@ -190,7 +209,7 @@ function Results() {
                                     <span><BsFillFlagFill/>{country.name} </span>
                                 )}
                             </div>
-                            <div className="col">
+                            <div className="col locations-container">
                                 {currentLocations.map((location, index) => (
                                     <div
                                         data-value={index}
@@ -247,12 +266,12 @@ function Results() {
                             <div className="col">
                                 <b>Campuses</b>
                             </div>
-                            <div className="col">
+                            <div className="col campuses-container">
                                 {currentCampuses.map((campus, index) => (
                                     <div
                                         data-value={index}
                                         key={index}
-                                        className="column"
+                                        className="column campus"
                                         onClick={onClickCampuses}>
                                         <div className="col">
                                             <div className="row">
@@ -273,7 +292,9 @@ function Results() {
                                               </div>
                                             </div>
                                         </div>
+                                        <hr color="black" />
                                     </div>
+                                    
                                 ))}
                             </div>
                         </div>

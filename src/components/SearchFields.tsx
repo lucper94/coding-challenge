@@ -41,7 +41,6 @@ function SearchFields() {
                     .toLowerCase()
                     .includes(destination.toLowerCase())
             })
-
             if (countryData.length > 0) {
                 setCountry(countryData[0])
             }

@@ -24,9 +24,10 @@ export interface  locations{
 }
 
 export type ContextStates = {
-	campuses:campuses[]
-	locations:locations[]
-	country:country
+	campuses:campuses[],
+	locations:locations[],
+	country:country,
+	setLocations:(locations:locations[]) => void,
 	setCountry:(country:country) => void,
 	selectedLocations:string[], 
 	setSelectedLocations:(a:string[]) => void,

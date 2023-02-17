@@ -14,7 +14,7 @@ export const GlobalProvider = ({ children, ...props }: Props ) => {
     const [locations, setLocations] = useState(data.locations);
     const [selectedLocations, setSelectedLocations] = useState<string[]|[]>([]);
     const [step, setStep] = useState<string>('destination');
-  	const valueData:ContextStates = {campuses, locations, country, setCountry, selectedLocations, setSelectedLocations, setProvider, provider, step, setStep };
+  	const valueData:ContextStates = {campuses, locations, country, setCountry, selectedLocations, setSelectedLocations, setProvider, provider, step, setStep, setLocations };
     return (
         <Context.Provider value={valueData}>
             {children}
